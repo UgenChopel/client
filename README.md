@@ -1,2 +1,1 @@
-# client
-Reading the individual dataSet created in client and print in the Terminal as well as writing to .csv file
+Original copy from: https://libiec61850.com/libiec61850/
