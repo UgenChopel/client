@@ -26,21 +26,17 @@ main(int argc, char** argv)
     srand(1);
     for (;;) {
     time_t start = time(NULL);  //start time (present time)
-    int time_interval = (5); //Run after every 5 seconds
-    printf("Client Request at %s", ctime(&start));
+    int time_interval = (.2); //Run after every 5 seconds
+    printf("\n%s", ctime(&start));
     //
+
 
     IedClientError error;
     MmsError mss_error;
 	IedConnection myClient = IedConnection_create();
 
     IedConnection_connect(myClient, &error, hostname, tcpPort);
-	//END TASK 1.6
 
-
-	//START TASK 2.3
-	// Obtain the tree shown in Figure 7
-	// Hint use LinkedList structure to loop through LD, LN, DO
     if (error == IED_ERROR_OK) {
 
         //Declare a LinkedList called dataSetItems
@@ -48,7 +44,9 @@ main(int argc, char** argv)
         LinkedList dataSetItems2 = LinkedList_create();
         LinkedList dataSetItems3 = LinkedList_create();
 
-
+        //
+        //Add elements maniupulated in server script in the dataSetItems
+        //Hint: LinkedList_add(dataSetItems,'itemreference')
         LinkedList_add(dataSetItems1, "SampleIEDDevice1/MMXU1.TotW.mag.f[MX]");
         LinkedList_add(dataSetItems1, "SampleIEDDevice1/MMXU1.TotWh.mag.f[MX]");
         LinkedList_add(dataSetItems1, "SampleIEDDevice1/MMXU1.A.mag.f[MX]");
@@ -81,17 +79,23 @@ main(int argc, char** argv)
         //Declare a ClientDataSet 'dataSetToRead' and read the dataset values from the newDataSet
         //Hint: Use 'IedConnection_readDataSetValues' function
         ClientDataSet dataSetToRead1=IedConnection_readDataSetValues(myClient, &error,dataSet_reference1, NULL);
+
         ClientDataSet dataSetToRead2=IedConnection_readDataSetValues(myClient, &error,dataSet_reference2, NULL);
+
         ClientDataSet dataSetToRead3=IedConnection_readDataSetValues(myClient, &error,dataSet_reference3, NULL);
 
         //
         //Declare an MmsValue 'dataSet_mmsValue'
         //Hint: Use 'ClientDataSet_getValues' function
         MmsValue* dataSet_mmsvalue1=ClientDataSet_getValues(dataSetToRead1);
+
         MmsValue* dataSet_mmsvalue2=ClientDataSet_getValues(dataSetToRead2);
+
         MmsValue* dataSet_mmsvalue3=ClientDataSet_getValues(dataSetToRead3);
 
-        printf("MMXU1 Values [Power, Energy, Current and Voltage] are:\n%.2f   %.2f  %.2f  %.2f\n",
+
+        printf("MMXU1 Values [Power, Energy, Current and Voltage] are:\n %s %.2f   %.2f  %.2f  %.2f\n",
+                                    ctime(&start),
                                     MmsValue_toFloat(MmsValue_getElement(dataSet_mmsvalue1,0)),
                                     MmsValue_toFloat(MmsValue_getElement(dataSet_mmsvalue1,1)),
                                     MmsValue_toFloat(MmsValue_getElement(dataSet_mmsvalue1,2)),
@@ -100,13 +104,17 @@ main(int argc, char** argv)
         //To write the file
 
         FILE * finout1;
-        finout1=fopen("value.csv", "w");
-        fprintf(finout1, "%.2f %.2f %.2f %.2f\n",
+        finout1=fopen("value.csv", "a");
+      //  fprintf(finout1, "Power Energy  Current Voltage\n");
+
+        fprintf(finout1, "%s %.2f %.2f %.2f %.2f\n",
+                                    ctime(&start),
                                     MmsValue_toFloat(MmsValue_getElement(dataSet_mmsvalue1,0)),
                                     MmsValue_toFloat(MmsValue_getElement(dataSet_mmsvalue1,1)),
                                     MmsValue_toFloat(MmsValue_getElement(dataSet_mmsvalue1,2)),
                                     MmsValue_toFloat(MmsValue_getElement(dataSet_mmsvalue1,3)));
         fclose(finout1);
+
 
 
         IedConnection_close(myClient);
