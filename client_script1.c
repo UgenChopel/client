@@ -26,7 +26,7 @@ main(int argc, char** argv)
     srand(1);
     for (;;) {
     time_t start = time(NULL);  //start time (present time)
-    int time_interval = (.2); //Run after every 5 seconds
+    int time_interval = (5); //Run after every 5 seconds
     printf("\n%s", ctime(&start));
     //
 
