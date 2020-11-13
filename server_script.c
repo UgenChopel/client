@@ -60,7 +60,7 @@ int main(int argc, char** argv) {
 		MmsValue* energyValue1 = MmsValue_newFloat(energy1);
 		IedServer_updateAttributeValue(myServer,IEDMODEL_Device1_MMXU1_TotWh_mag_f,energyValue1);
 
-        float current1 = 300.f;
+        	float current1 = 300.f;
 		MmsValue* currentValue1 = MmsValue_newFloat(current1);
 		IedServer_updateAttributeValue(myServer,IEDMODEL_Device1_MMXU1_A_mag_f,currentValue1);
 
