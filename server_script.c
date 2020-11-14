@@ -3,6 +3,8 @@
 #include <signal.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <unistd.h>
+#include <time.h>
 
 #include "static_model.h"
 
@@ -18,7 +20,6 @@ connectionHandler (IedServer self, ClientConnection connection, bool connected, 
 	// Else print 'connection closed'
 	else
         printf("Connection closed\n");
-	// END TASK 1.1
 }
 
 int main(int argc, char** argv) {
@@ -39,28 +40,38 @@ int main(int argc, char** argv) {
 		IedServer_destroy(myServer);
 		exit(-1);
 	}
-	// END TASK 1.4
 
 	running = 1;
-	while (running) {
+        while(running){
 		IedServer_lockDataModel(myServer);
 		IedServer_unlockDataModel(myServer);
-		Thread_sleep(1000);
+        Thread_sleep(1000);  //update time (milliseconds) from the file
 
-		float energy=20.f;
-		MmsValue* energyValue = MmsValue_newFloat(energy);
+
+        // To read .csv file and display
+        float value;
+
+        FILE * fPtr =fopen("read.csv", "r");
+            fscanf(fPtr, "%f", &value);
+            printf("the value: %f\n", value);
+
+        fclose(fPtr);
+
+//
+
+		float energy= 205.f;
+        	MmsValue* energyValue = MmsValue_newFloat(energy);
 		IedServer_updateAttributeValue(myServer,IEDMODEL_Device1_DGEN1_TotWh_mag_f,energyValue);
 
-
-		float power1 = 105.f;
+		float power1 = value;
 		MmsValue* powerValue1 = MmsValue_newFloat(power1);
 		IedServer_updateAttributeValue(myServer,IEDMODEL_Device1_MMXU1_TotW_mag_f,powerValue1);
 
-		float energy1 = 1500.f;
+		float energy1 = 100.f;
 		MmsValue* energyValue1 = MmsValue_newFloat(energy1);
 		IedServer_updateAttributeValue(myServer,IEDMODEL_Device1_MMXU1_TotWh_mag_f,energyValue1);
 
-        float current1 = 300.f;
+        	float current1 = 300.f;
 		MmsValue* currentValue1 = MmsValue_newFloat(current1);
 		IedServer_updateAttributeValue(myServer,IEDMODEL_Device1_MMXU1_A_mag_f,currentValue1);
 
