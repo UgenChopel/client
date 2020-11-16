@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <time.h>
 
+
 #include "static_model.h"
 
 /* import IEC 61850 device model created from SCL-File */
@@ -20,6 +21,7 @@ connectionHandler (IedServer self, ClientConnection connection, bool connected, 
 	// Else print 'connection closed'
 	else
         printf("Connection closed\n");
+	// END TASK 1.1
 }
 
 int main(int argc, char** argv) {
@@ -45,41 +47,41 @@ int main(int argc, char** argv) {
         while(running){
 		IedServer_lockDataModel(myServer);
 		IedServer_unlockDataModel(myServer);
-        Thread_sleep(1000);  //update time (milliseconds) from the file
+        Thread_sleep(2000);  //update time (milliseconds) from the file
 
-
-        // To read .csv file and display
-        float value;
-
+        int i, j;
+        float value[1][4];
         FILE * fPtr =fopen("read.csv", "r");
-            fscanf(fPtr, "%f", &value);
-            printf("the value: %f\n", value);
 
+            for(i=0; i<1; i++){
+                for(j=0; j<4; j++){
+                    fscanf(fPtr, "%f\n", &value[i][j]);
+                    printf("Value: %.2f \n", value[i][j]); //printing the values in the terminal
+                }
+    	}
         fclose(fPtr);
-
-//
 
 		float energy= 205.f;
         	MmsValue* energyValue = MmsValue_newFloat(energy);
 		IedServer_updateAttributeValue(myServer,IEDMODEL_Device1_DGEN1_TotWh_mag_f,energyValue);
 
-		float power1 = value;
+		float power1 = value[0][0];
 		MmsValue* powerValue1 = MmsValue_newFloat(power1);
 		IedServer_updateAttributeValue(myServer,IEDMODEL_Device1_MMXU1_TotW_mag_f,powerValue1);
 
-		float energy1 = 100.f;
+		float energy1 = value[0][1];
 		MmsValue* energyValue1 = MmsValue_newFloat(energy1);
 		IedServer_updateAttributeValue(myServer,IEDMODEL_Device1_MMXU1_TotWh_mag_f,energyValue1);
 
-        	float current1 = 300.f;
+        	float current1 = value[0][2];
 		MmsValue* currentValue1 = MmsValue_newFloat(current1);
 		IedServer_updateAttributeValue(myServer,IEDMODEL_Device1_MMXU1_A_mag_f,currentValue1);
 
-		float power2 = 150.f;
+		float power2 = 230.f;
 		MmsValue* powerValue2 = MmsValue_newFloat(power2);
 		IedServer_updateAttributeValue(myServer,IEDMODEL_Device1_MMXU2_TotW_mag_f,powerValue2);
 
-		float voltage2 = 230.f;
+		float voltage2 = value[0][3];
 		MmsValue* voltageValue2 = MmsValue_newFloat(voltage2);
 		IedServer_updateAttributeValue(myServer,IEDMODEL_Device1_MMXU2_PhV_mag_f,voltageValue2);
 
@@ -87,5 +89,6 @@ int main(int argc, char** argv) {
 
 	IedServer_stop(myServer); //stop MMS server - close TCP server socket and all client sockets
 	IedServer_destroy(myServer); // Cleanup - free all resources
+
 
 }
