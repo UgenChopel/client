@@ -93,26 +93,27 @@ main(int argc, char** argv)
 
         MmsValue* dataSet_mmsvalue3=ClientDataSet_getValues(dataSetToRead3);
 
+        
+	int index_number;
+ //       printf("MMXU1 Values [Power, Energy, Current and Voltage]: %s", ctime(&start));
+        for(index_number=0; index_number<=3; index_number++){
+            printf("%.2f\n", MmsValue_toFloat(MmsValue_getElement(dataSet_mmsvalue1,index_number)));
 
-        printf("MMXU1 Values [Power, Energy, Current and Voltage] are:\n %s %.2f   %.2f  %.2f  %.2f\n",
-                                    ctime(&start),
-                                    MmsValue_toFloat(MmsValue_getElement(dataSet_mmsvalue1,0)),
-                                    MmsValue_toFloat(MmsValue_getElement(dataSet_mmsvalue1,1)),
-                                    MmsValue_toFloat(MmsValue_getElement(dataSet_mmsvalue1,2)),
-                                    MmsValue_toFloat(MmsValue_getElement(dataSet_mmsvalue1,3)));
+        }
+
 
         //To write the file
 
         FILE * finout1;
         finout1=fopen("value.csv", "a");
       //  fprintf(finout1, "Power Energy  Current Voltage\n");
+        fprintf(finout1, "\n%s", ctime(&start));
 
-        fprintf(finout1, "%s %.2f %.2f %.2f %.2f\n",
-                                    ctime(&start),
-                                    MmsValue_toFloat(MmsValue_getElement(dataSet_mmsvalue1,0)),
-                                    MmsValue_toFloat(MmsValue_getElement(dataSet_mmsvalue1,1)),
-                                    MmsValue_toFloat(MmsValue_getElement(dataSet_mmsvalue1,2)),
-                                    MmsValue_toFloat(MmsValue_getElement(dataSet_mmsvalue1,3)));
+        for(index_number=0; index_number<=3; index_number++){
+            fprintf(finout1, "%.2f ", MmsValue_toFloat(MmsValue_getElement(dataSet_mmsvalue1,index_number)));
+
+            }
+        fprintf(finout1, "\n");
         fclose(finout1);
 
 
