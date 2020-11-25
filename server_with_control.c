@@ -108,27 +108,6 @@ int main(int argc, char** argv) {
             IEDMODEL_Device1_MMXU1_SPCSO1);
 	IedServer_handleWriteAccess(myServer, IEDMODEL_Device1_MMXU1_SPCSO1_ctlModel, writeAccessHandler, NULL);
 
-/*
-	  IedServer_start(myServer, 102);
-
-    if (!IedServer_isRunning(myServer)) {
-        printf("Starting server failed! Exit.\n");
-        IedServer_destroy(myServer);
-        exit(-1);
-    }
-
-    running = 1;
-
-    signal(SIGINT, sigint_handler);
-
-    while (running) {
-        Thread_sleep(1);
-    }
-
-*/
-
-
-
 
 	IedServer_setConnectionIndicationHandler(myServer, (IedConnectionIndicationHandler) connectionHandler, NULL);
 
@@ -180,20 +159,6 @@ int main(int argc, char** argv) {
 		float power2 = value[0][4];
 		MmsValue* powerValue2 = MmsValue_newFloat(power2);
 		IedServer_updateAttributeValue(myServer,IEDMODEL_Device1_MMXU2_TotW_mag_f,powerValue2);
-
-
-/*
-		float energy= value[0][0];
-        MmsValue* energyValue = MmsValue_newFloat(energy);
-		IedServer_updateAttributeValue(myServer,IEDMODEL_Device1_DGEN1_TotWh_mag_f,energyValue);
-*/
-
-
-
-
-
-
-
 
 	}
 
